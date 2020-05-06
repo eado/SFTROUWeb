@@ -24,7 +24,8 @@ export default (message: any, ws: WebSocket) => {
             const process = exec('java SFTROUCLI input.' + message.fileType);
             process.stdout?.on('data', (data) => {
                 console.log(data)
-                send({data})
+                const chunks = (data as string).split("\n")
+                chunks.forEach(chunk => send({data: chunk}))
             })
 
             process.on('error', (err) => {

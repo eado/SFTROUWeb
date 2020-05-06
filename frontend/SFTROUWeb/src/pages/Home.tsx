@@ -13,6 +13,8 @@ const Home: React.FC = () => {
 
   const [showAlert1, setShowAlert1] = useState(false);
 
+  const [converting, setConverting] = useState(false);
+
   const onDrop = useCallback(acceptedFiles => {
     const files = acceptedFiles as File[]
     const reader = new FileReader()
@@ -48,6 +50,7 @@ const Home: React.FC = () => {
   }
 
   const convert = () => {
+    setConverting(true)
     startProcess(data => {
       if (data.image) {
         setStatus("")
@@ -68,13 +71,14 @@ const Home: React.FC = () => {
           document.body.appendChild(b)
           b.click()
         }, 1000)
-        
+        setConverting(false)
       } else if (data.data) {
         setStatus(data.data)
       } else if (data.error) {
         setStatus("")
         setError(data.error)
         setShowAlert1(true)
+        setConverting(false)
       }
     }, img, fileType)
   }
@@ -110,7 +114,7 @@ const Home: React.FC = () => {
           }<br />
           { img ? <img alt="uploadedFile"src={"data:image/png;base64," + img}/> : null }
         </div>
-        <IonButton className="convertButton" disabled={img === ""} onClick={convert}>Convert {status ? "(" + status.trim() + ")": null}</IonButton>
+        <IonButton className="convertButton" disabled={img === "" || converting} onClick={convert}>Convert {status ? "(" + status.trim() + ")": null}</IonButton>
         {status !== "" && status.indexOf("%") < 0 ?
             <IonProgressBar type="indeterminate"></IonProgressBar> : null
         } 
