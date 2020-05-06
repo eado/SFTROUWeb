@@ -1,4 +1,4 @@
-const URL = "wss://home.omarelamri.me:443"
+const URL = "wss://sftrou.omarelamri.me:443"
 
 let ws: WebSocket
 const callbacks: [String, (data: any) => void][] = []
