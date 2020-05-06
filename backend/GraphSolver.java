@@ -146,7 +146,7 @@ public class GraphSolver {
             int percentage =(int)(k*100.0/N);
 
             if (percentage!=lastPercentage){
-                System.err.println(percentage + "%");
+                System.out.println(percentage + "%");
                 progressBar.setValue(percentage);
 
                 lastPercentage=percentage;
@@ -532,6 +532,7 @@ public class GraphSolver {
 
         GraphSolver.progressBar=progressBar;
 
+        System.out.println("Creating paths");
         VectorCreator vectorCreator = new VectorCreator();
 
         ArrayList<ArrayList<VectorCreator.Point>> vectorCreatorPaths = vectorCreator.getPaths(inputFile);
@@ -650,7 +651,8 @@ public class GraphSolver {
 //        }
 
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+;
+        System.out.println("Finding optimal path");
         GraphSolver G = new GraphSolver(vertices.size() + 1);
 
         int verticeId;
