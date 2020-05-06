@@ -3,7 +3,7 @@
 
 The [original version](https://github.com/markyland/SisyphusForTheRestOfUs) by [markyland](https://github.com/markyland/) is still used in the backend of the application.   
 
-Feel free to test it out at https://vpn.omarelamri.me.
+Feel free to test it out at https://sftrou.omarelamri.me.
 
 ## Technologies used
 - React
