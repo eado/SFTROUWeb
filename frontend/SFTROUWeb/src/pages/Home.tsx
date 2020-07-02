@@ -1,4 +1,5 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonProgressBar, IonAlert } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonProgressBar, IonAlert, IonIcon, IonPopover, IonList, IonItem, IonCheckbox, IonLabel } from '@ionic/react';
+import { cog } from 'ionicons/icons'
 import React, { useCallback, useState } from 'react';
 import './Home.css';
 
@@ -8,10 +9,15 @@ import { startProcess } from '../ServerProvider';
 const Home: React.FC = () => {
   let [img, setImg] = useState("");
   let [fileType, setFileType] = useState("")
+  let [fileName, setFileName] = useState("")
   let [status, setStatus] = useState("")
   let [error, setError] = useState("")
 
   const [showAlert1, setShowAlert1] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+
+  const [preview, setPreview] = useState("")
 
   const [converting, setConverting] = useState(false);
 
@@ -26,51 +32,45 @@ const Home: React.FC = () => {
       }
       setImg(encoded)
       setFileType(files[files.length - 1].name.split(".")[1])
+      setFileName(files[files.length - 1].name.split(".")[0])
     }
   }, [])
 
-  const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
-    const byteCharacters = atob(b64Data);
-    const byteArrays = [];
+  // const b64toBlob = (b64Data: string, contentType='', sliceSize=512) => {
+  //   const byteCharacters = atob(b64Data);
+  //   const byteArrays = [];
   
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
+  //   for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+  //     const slice = byteCharacters.slice(offset, offset + sliceSize);
   
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
+  //     const byteNumbers = new Array(slice.length);
+  //     for (let i = 0; i < slice.length; i++) {
+  //       byteNumbers[i] = slice.charCodeAt(i);
+  //     }
   
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
+  //     const byteArray = new Uint8Array(byteNumbers);
+  //     byteArrays.push(byteArray);
+  //   }
   
-    const blob = new Blob(byteArrays, {type: contentType});
-    return blob;
-  }
+  //   const blob = new Blob(byteArrays, {type: contentType});
+  //   return blob;
+  // }
 
   const convert = () => {
     setConverting(true)
     startProcess(data => {
       if (data.image) {
         setStatus("")
-        let a = document.createElement('a')
-        let blob = b64toBlob(data.image, 'image/png')
-        let url = window.URL.createObjectURL(blob)
-        a.href = url
-        a.download = "output.png"
-        document.body.appendChild(a)
-        a.click()
+        setPreview(data.image)
+        setShowImage(true)
 
-        setTimeout(() => {
-          let b = document.createElement('a')
-          let blob2 = new Blob([data.thr], {type: 'text/plain'})
-          let url2 = window.URL.createObjectURL(blob2)
-          b.href = url2
-          b.download = "output.thr"
-          document.body.appendChild(b)
-          b.click()
-        }, 1000)
+        let b = document.createElement('a')
+        let blob2 = new Blob([data.thr], {type: 'text/plain'})
+        let url2 = window.URL.createObjectURL(blob2)
+        b.href = url2
+        b.download = fileName + ".thr"
+        document.body.appendChild(b)
+        b.click()
         setConverting(false)
       } else if (data.data) {
         setStatus(data.data)
@@ -80,7 +80,7 @@ const Home: React.FC = () => {
         setShowAlert1(true)
         setConverting(false)
       }
-    }, img, fileType)
+    }, img, fileType, fileName, localStorage.getItem("addErase") === "true")
   }
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop })
@@ -114,7 +114,23 @@ const Home: React.FC = () => {
           }<br />
           { img ? <img alt="uploadedFile"src={"data:image/png;base64," + img}/> : null }
         </div>
+        <>
         <IonButton className="convertButton" disabled={img === "" || converting} onClick={convert}>Convert {status ? "(" + status.trim() + ")": null}</IonButton>
+        <IonPopover isOpen={showImage} onDidDismiss={() => setShowImage(false)}>
+          <img alt="finalImage" src={"data:image/png;base64," + preview}></img>
+        </IonPopover>
+        </>
+        <>
+        <IonButton onClick={() => setShowSettings(true)} className="settingsButton" disabled={converting}><IonIcon icon={cog}></IonIcon></IonButton>
+        <IonPopover isOpen={showSettings} onDidDismiss={() => setShowSettings(false)}>
+          <IonList>
+            <IonItem>
+              <IonLabel>Add Erase</IonLabel>
+              <IonCheckbox checked={localStorage.getItem("addErase") === "true"} onIonChange={e => e.detail.checked ? localStorage.setItem("addErase", "true") : localStorage.setItem("addErase", "false") } />
+            </IonItem>
+          </IonList>
+        </IonPopover>
+        </>
         {status !== "" && status.indexOf("%") < 0 ?
             <IonProgressBar type="indeterminate"></IonProgressBar> : null
         } 

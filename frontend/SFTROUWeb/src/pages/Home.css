@@ -27,7 +27,14 @@
     bottom: 5%;
     position: absolute;
     left: 25%;
-    width: 50%;
+    width: 45%;
+}
+
+.settingsButton {
+    bottom: 5%;
+    position: absolute;
+    right: 25%;
+    width: 5%;
 }
 
 img {
