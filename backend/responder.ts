@@ -34,10 +34,14 @@ export default (message: any, ws: WebSocket) => {
 
             process.on('close', (code, _) => {
                 if (code == 0) {
-                    const thr = fs.readFileSync(message.fileName + ".thr").toString()
-                    const image = fs.readFileSync(message.fileName + ".png").toString('base64')
+                    try {
+                        const thr = fs.readFileSync(message.fileName + ".thr").toString()
+                        const image = fs.readFileSync(message.fileName + ".png").toString('base64')
+                        send({thr, image})
+                    } catch {
+                        sendError("Could not convert image")
+                    }
 
-                    send({thr, image})
                 } else {
                     sendError("Could not convert image")
                 }
