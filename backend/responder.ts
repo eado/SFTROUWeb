@@ -16,12 +16,12 @@ export default (message: any, ws: WebSocket) => {
     const functions: IData = {
         startProcess: () => {
             if (message.fileType == "xyz") {
-                fs.writeFileSync(message.filename + "input.xyz", message.data);
+                fs.writeFileSync(message.fileName + "input.xyz", message.data);
             } else {
-                fs.writeFileSync(message.filename + "input.png", Buffer.from(message.data, 'base64'));
+                fs.writeFileSync(message.fileName + "input.png", Buffer.from(message.data, 'base64'));
             }
 
-            const process = exec('java ../SisyphusForTheRestOfUs/src/v1/SFTROUCLI ' + message.filename + 'input.' + message.fileType + " " + message.filename + message.addErase ? "true" : "false");
+            const process = exec('java ../SisyphusForTheRestOfUs/src/v1/SFTROUCLI ' + message.fileName + 'input.' + message.fileType + " " + message.fileName + message.addErase ? "true" : "false");
             process.stdout?.on('data', (data) => {
                 console.log(data)
                 const chunks = (data as string).split("\n")
