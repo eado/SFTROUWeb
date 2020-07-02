@@ -21,7 +21,7 @@ export default (message: any, ws: WebSocket) => {
                 fs.writeFileSync(message.filename + "input.png", Buffer.from(message.data, 'base64'));
             }
 
-            const process = exec('java SFTROUCLI ' + message.filename + 'input.' + message.fileType + " " + message.filename + message.addErase ? "true" : "false");
+            const process = exec('java ../SisyphusForTheRestOfUs/src/v1/SFTROUCLI ' + message.filename + 'input.' + message.fileType + " " + message.filename + message.addErase ? "true" : "false");
             process.stdout?.on('data', (data) => {
                 console.log(data)
                 const chunks = (data as string).split("\n")
