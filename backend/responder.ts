@@ -16,12 +16,14 @@ export default (message: any, ws: WebSocket) => {
     const functions: IData = {
         startProcess: () => {
             if (message.fileType == "xyz") {
-                fs.writeFileSync(message.fileName + "input.xyz", message.data);
+                fs.writeFileSync("../SisyphusForTheRestOfUs/src/v1/" + message.fileName + "input.xyz", message.data);
             } else {
-                fs.writeFileSync(message.fileName + "input.png", Buffer.from(message.data, 'base64'));
+                fs.writeFileSync("../SisyphusForTheRestOfUs/src/v1/" + message.fileName + "input.png", Buffer.from(message.data, 'base64'));
             }
 
-            const process = exec('java ../SisyphusForTheRestOfUs/src/v1/SFTROUCLI ' + message.fileName + 'input.' + message.fileType + " " + message.fileName + message.addErase ? "true" : "false");
+            const processString = `cd ../SisyphusForTheRestOfUs/src && java v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
+            const process = exec(processString);
+            console.log(processString)
             process.stdout?.on('data', (data) => {
                 console.log(data)
                 const chunks = (data as string).split("\n")
@@ -35,8 +37,8 @@ export default (message: any, ws: WebSocket) => {
             process.on('close', (code, _) => {
                 if (code == 0) {
                     try {
-                        const thr = fs.readFileSync(message.fileName + ".thr").toString()
-                        const image = fs.readFileSync(message.fileName + ".png").toString('base64')
+                        const thr = fs.readFileSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".thr").toString()
+                        const image = fs.readFileSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".png").toString('base64')
                         send({thr, image})
                     } catch {
                         sendError("Could not convert image")

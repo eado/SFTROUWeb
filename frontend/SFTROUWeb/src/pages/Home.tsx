@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonProgressBar, IonAlert, IonIcon, IonPopover, IonList, IonItem, IonCheckbox, IonLabel } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonProgressBar, IonAlert, IonIcon, IonPopover, IonList, IonItem, IonCheckbox, IonLabel, IonModal } from '@ionic/react';
 import { cog } from 'ionicons/icons'
 import React, { useCallback, useState } from 'react';
 import './Home.css';
@@ -116,9 +116,10 @@ const Home: React.FC = () => {
         </div>
         <>
         <IonButton className="convertButton" disabled={img === "" || converting} onClick={convert}>Convert {status ? "(" + status.trim() + ")": null}</IonButton>
-        <IonPopover isOpen={showImage} onDidDismiss={() => setShowImage(false)}>
-          <img alt="finalImage" src={"data:image/png;base64," + preview}></img>
-        </IonPopover>
+        <IonModal isOpen={showImage} onDidDismiss={() => setShowImage(false)}>
+          <img className="preview" alt="finalImage" src={"data:image/png;base64," + preview}></img>
+          <IonButton onClick={() => setShowImage(false)}>Close</IonButton>
+        </IonModal>
         </>
         <>
         <IonButton onClick={() => setShowSettings(true)} className="settingsButton" disabled={converting}><IonIcon icon={cog}></IonIcon></IonButton>
