@@ -19,6 +19,7 @@ export default (message: any, ws: WebSocket) => {
                 fs.writeFileSync("../SisyphusForTheRestOfUs/src/v1/" + message.fileName + "input.xyz", message.data);
             } else {
                 fs.writeFileSync("../SisyphusForTheRestOfUs/src/v1/" + message.fileName + "input.png", Buffer.from(message.data, 'base64'));
+                message.fileType = "png"
             }
 
             const processString = `cd ../SisyphusForTheRestOfUs/src && java v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
