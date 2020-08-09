@@ -80,7 +80,7 @@ const Home: React.FC = () => {
         setShowAlert1(true)
         setConverting(false)
       }
-    }, img, fileType, fileName, localStorage.getItem("addErase") === "true")
+    }, img, fileType, fileName, localStorage.getItem("addErase") !== "false")
   }
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop })
@@ -127,7 +127,7 @@ const Home: React.FC = () => {
           <IonList>
             <IonItem>
               <IonLabel>Add Erase</IonLabel>
-              <IonCheckbox checked={localStorage.getItem("addErase") === "true"} onIonChange={e => e.detail.checked ? localStorage.setItem("addErase", "true") : localStorage.setItem("addErase", "false") } />
+              <IonCheckbox checked={localStorage.getItem("addErase") !== "false"} onIonChange={e => e.detail.checked ? localStorage.setItem("addErase", "true") : localStorage.setItem("addErase", "false") } />
             </IonItem>
           </IonList>
         </IonPopover>
