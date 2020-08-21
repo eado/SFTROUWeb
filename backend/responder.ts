@@ -15,6 +15,7 @@ export default (message: any, ws: WebSocket) => {
 
     const functions: IData = {
         startProcess: () => {
+            let lastError = "Could not convert image"
             if (message.fileType == "xyz") {
                 fs.writeFileSync("../SisyphusForTheRestOfUs/src/v1/" + message.fileName + "input.xyz", message.data);
             } else {
@@ -28,11 +29,17 @@ export default (message: any, ws: WebSocket) => {
             process.stdout?.on('data', (data) => {
                 console.log(data)
                 const chunks = (data as string).split("\n")
-                chunks.forEach(chunk => send({data: chunk}))
+                chunks.forEach(chunk => {
+                    send({data: chunk})
+                    if (chunk.startsWith("Error: ")) {
+                        lastError = chunk
+                    }
+                })
             })
 
             process.on('error', (err) => {
                 sendError(err.message)
+                lastError = err.message
             })
 
             process.on('close', (code, _) => {
@@ -42,11 +49,11 @@ export default (message: any, ws: WebSocket) => {
                         const image = fs.readFileSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".png").toString('base64')
                         send({thr, image})
                     } catch {
-                        sendError("Could not convert image")
+                        sendError(lastError)
                     }
 
                 } else {
-                    sendError("Could not convert image")
+                    sendError(lastError)
                 }
             })
         }
