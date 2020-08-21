@@ -33,6 +33,7 @@ export default (message: any, ws: WebSocket) => {
                     send({data: chunk})
                     if (chunk.startsWith("Error: ")) {
                         lastError = chunk
+                        sendError(chunk)
                     }
                 })
             })
