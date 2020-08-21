@@ -23,7 +23,7 @@ export default (message: any, ws: WebSocket) => {
                 message.fileType = "png"
             }
 
-            const processString = `cd ../SisyphusForTheRestOfUs/src && java v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
+            const processString = `cd ../SisyphusForTheRestOfUs/src && java -Xmx4G v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
             const process = exec(processString);
             console.log(processString)
             process.stdout?.on('data', (data) => {
