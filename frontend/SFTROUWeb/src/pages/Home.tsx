@@ -31,8 +31,11 @@ const Home: React.FC = () => {
         encoded += '='.repeat(4 - (encoded.length % 4));
       }
       setImg(encoded)
-      setFileType(files[files.length - 1].name.split(".")[1])
-      setFileName(files[files.length - 1].name.split(".")[0])
+      setFileType(files[files.length - 1].name.split(".")[1].toLowerCase())
+      let fn = files[files.length - 1].name.split(".")[0]
+      fn.replace(" ", "")
+
+      setFileName(fn)
     }
   }, [])
 

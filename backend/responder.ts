@@ -48,6 +48,9 @@ export default (message: any, ws: WebSocket) => {
                     try {
                         const thr = fs.readFileSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".thr").toString()
                         const image = fs.readFileSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".png").toString('base64')
+
+                        fs.unlinkSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".thr")
+                        fs.unlinkSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".png")
                         send({thr, image})
                     } catch {
                         sendError(lastError)
