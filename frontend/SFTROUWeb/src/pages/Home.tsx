@@ -33,7 +33,7 @@ const Home: React.FC = () => {
       setImg(encoded)
       setFileType(files[files.length - 1].name.split(".")[1].toLowerCase())
       let fn = files[files.length - 1].name.split(".")[0]
-      fn.replace(" ", "")
+      fn = fn.split(" ").join("")
 
       setFileName(fn)
     }
