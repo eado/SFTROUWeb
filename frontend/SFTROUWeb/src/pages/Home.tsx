@@ -108,7 +108,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <div className="container" {...getRootProps()}>
-          <strong>Import an .xyz or .png file below:</strong><br /><br />
+          <strong>Import an image file (.png, .jpg, etc.) below:</strong><br /><br />
           <input {...getInputProps()} />
           {
             isDragActive ?
