@@ -1,16 +1,16 @@
 console.log("Starting SFTROU server...")
 
 import WebSocket from 'ws';
-import https from 'https';
+import http from 'http';
 import fs from 'fs';
 import url from 'url'
 import path from 'path'
 
 import responder from './responder'
 
-const server = https.createServer({
-    cert: fs.readFileSync(process.env.SSLCERT as string),
-    key: fs.readFileSync(process.env.SSLKEY as string)
+const server = http.createServer({
+    // cert: fs.readFileSync("/etc/letsencrypt/live/sftrou.omarelamri.me/fullchain.pem"),
+    // key: fs.readFileSync("/etc/letsencrypt/live/sftrou.omarelamri.me/privkey.pem")
 }, function (req, res) {
     console.log(`${req.method} ${req.url}`);
   
@@ -85,5 +85,5 @@ wss.clients.forEach(function each(ws) {
 });
 }, 30000);
 
-server.listen(443)
-console.log("Listening on port 443...")
+server.listen(8080)
+console.log("Listening on port 8080...")

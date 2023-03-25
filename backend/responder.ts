@@ -23,7 +23,7 @@ export default (message: any, ws: WebSocket) => {
                 message.fileType = "png"
             }
 
-            const processString = `cd ../SisyphusForTheRestOfUs/src && java -Xmx4G v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
+            const processString = `cd ../SisyphusForTheRestOfUs/src && java -Xmx100m v1/SFTROUCLI v1/${message.fileName}input.${message.fileType} ${message.fileName} ${(message.addErase ? "true" : "false")}`
             const process = exec(processString);
             console.log(processString)
             process.stdout?.on('data', (data) => {
@@ -41,6 +41,7 @@ export default (message: any, ws: WebSocket) => {
             process.on('error', (err) => {
                 sendError(err.message)
                 lastError = err.message
+		fs.unlinkSync(`../SisyphusForTheRestOfUs/src/v1/${message.fileName}input.${message.fileType}`)
             })
 
             process.on('close', (code, _) => {
@@ -51,13 +52,16 @@ export default (message: any, ws: WebSocket) => {
 
                         fs.unlinkSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".thr")
                         fs.unlinkSync("../SisyphusForTheRestOfUs/src/" + message.fileName + ".png")
-                        send({thr, image})
+			fs.unlinkSync(`../SisyphusForTheRestOfUs/src/v1/${message.fileName}input.${message.fileType}`)
+			send({thr, image})
                     } catch {
                         sendError(lastError)
+			fs.unlinkSync(`../SisyphusForTheRestOfUs/src/v1/${message.fileName}input.${message.fileType}`)
                     }
 
                 } else {
                     sendError(lastError)
+   	            fs.unlinkSync(`../SisyphusForTheRestOfUs/src/v1/${message.fileName}input.${message.fileType}`)
                 }
             })
         }
