@@ -126,14 +126,20 @@ const Home: React.FC = () => {
         </>
         <>
         <IonButton onClick={() => setShowSettings(true)} className="settingsButton" disabled={converting}><IonIcon icon={cog}></IonIcon></IonButton>
-        <IonPopover isOpen={showSettings} onDidDismiss={() => setShowSettings(false)}>
+        <IonModal isOpen={showSettings} onDidDismiss={() => setShowSettings(false)}>
+          <IonHeader>
+            <IonToolbar>
+              <IonTitle>Settings</IonTitle>
+              <IonButton onClick={() => setShowSettings(false)}>Close</IonButton>
+            </IonToolbar>
+          </IonHeader>
           <IonList>
             <IonItem>
               <IonLabel>Add Erase</IonLabel>
               <IonCheckbox checked={localStorage.getItem("addErase") !== "false"} onIonChange={e => e.detail.checked ? localStorage.setItem("addErase", "true") : localStorage.setItem("addErase", "false") } />
             </IonItem>
           </IonList>
-        </IonPopover>
+        </IonModal>
         </>
         {status !== "" && status.indexOf("%") < 0 ?
             <IonProgressBar type="indeterminate"></IonProgressBar> : null
