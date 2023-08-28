@@ -3,4 +3,4 @@ node_modules
 backend/build
 backend/*.png
 backend/*.thr
-backend/website
+# backend/website
